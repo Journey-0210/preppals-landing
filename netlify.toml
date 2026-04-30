@@ -2,6 +2,16 @@
   publish = "."
 
 [[redirects]]
+  from = "/en"
+  to = "/PrepPals Landing EN.html"
+  status = 200
+
+[[redirects]]
+  from = "/en/*"
+  to = "/PrepPals Landing EN.html"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/PrepPals Landing.html"
   status = 200
