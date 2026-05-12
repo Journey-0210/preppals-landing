@@ -1,0 +1,192 @@
+/* PrepPals Design System — Colors & Type
+ * Source of truth for color tokens, typography scale, and semantic styles.
+ * Usage: <link rel="stylesheet" href="/colors_and_type.css">
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap");
+
+:root {
+  /* ============ BRAND COLORS ============ */
+  /* Navy — primary surface family. Deep, dark, confident. */
+  --navy-950: #050b1a;   /* page background */
+  --navy-900: #0a1124;   /* primary surface (matches landing) */
+  --navy-800: #111a33;   /* card/section surface */
+  --navy-700: #1a2545;   /* elevated card / form field */
+  --navy-600: #243056;   /* hover surface */
+  --navy-500: #34406b;   /* dividers, muted strokes */
+  --navy-400: #4f5a85;   /* tertiary text on dark */
+
+  /* Orange — accent / CTA family. Pulled from logo + landing CTA. */
+  --orange-50:  #fff4ec;
+  --orange-100: #ffe2cf;
+  --orange-200: #ffc097;
+  --orange-300: #ff9b5e;
+  --orange-400: #ff7c3e;
+  --orange-500: #ff6534;  /* primary CTA */
+  --orange-600: #ee4f1f;  /* CTA hover / pressed */
+  --orange-700: #c83c12;
+  --orange-800: #8f2a0d;
+
+  /* Indigo (logo navy-blue, lighter than surface navy) */
+  --indigo-500: #2a3aa3;
+  --indigo-600: #233186;  /* logo navy */
+  --indigo-700: #1c2769;
+
+  /* ============ NEUTRALS (on-dark) ============ */
+  --white: #ffffff;
+  --fg-1: #ffffff;             /* primary text */
+  --fg-2: rgba(255,255,255,.78); /* body text */
+  --fg-3: rgba(255,255,255,.58); /* secondary / placeholder */
+  --fg-4: rgba(255,255,255,.38); /* muted / disabled */
+  --fg-on-orange: #ffffff;
+
+  /* Hairlines & dividers */
+  --stroke-1: rgba(255,255,255,.08);
+  --stroke-2: rgba(255,255,255,.14);
+  --stroke-3: rgba(255,255,255,.22);
+
+  /* ============ SEMANTIC ============ */
+  --bg-page: var(--navy-900);
+  --bg-surface: var(--navy-800);
+  --bg-field: var(--navy-700);
+  --bg-elevated: var(--navy-700);
+  --bg-overlay: rgba(5, 11, 26, .72);
+
+  --accent: var(--orange-500);
+  --accent-hover: var(--orange-600);
+  --accent-soft: rgba(255, 101, 52, .14);
+
+  --success: #22c993;
+  --warning: #f5b942;
+  --danger:  #ff5161;
+  --info:    #4ea3ff;
+
+  --focus-ring: 0 0 0 3px rgba(255, 101, 52, .35);
+
+  /* ============ TYPOGRAPHY ============ */
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Plus Jakarta Sans", -apple-system, sans-serif; /* same family, heavier weight */
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Font sizes — display heavy on hero, tight on body */
+  --fs-hero:   72px;   /* "Master Math." */
+  --fs-h1:     48px;
+  --fs-h2:     32px;
+  --fs-h3:     24px;
+  --fs-h4:     20px;
+  --fs-lg:     18px;
+  --fs-base:   16px;
+  --fs-sm:     14px;
+  --fs-xs:     12px;
+  --fs-eyebrow:11px;
+
+  --lh-tight:  1.05;
+  --lh-snug:   1.2;
+  --lh-normal: 1.5;
+  --lh-relaxed:1.65;
+
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semibold:600;
+  --fw-bold:    700;
+  --fw-extra:   800;
+
+  /* ============ SPACING (4px base) ============ */
+  --sp-0:  0;
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+  --sp-20: 80px;
+  --sp-24: 96px;
+
+  /* ============ RADII ============ */
+  --r-xs: 4px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;   /* cards, fields */
+  --r-xl: 20px;   /* large cards */
+  --r-2xl: 28px;
+  --r-pill: 999px;
+
+  /* ============ SHADOWS / ELEVATION ============ */
+  --shadow-1: 0 1px 2px rgba(0,0,0,.4);
+  --shadow-2: 0 6px 18px rgba(0,0,0,.35);
+  --shadow-3: 0 18px 48px rgba(0,0,0,.45);
+  --shadow-cta: 0 10px 24px -6px rgba(255,101,52,.55);
+  --shadow-glow-orange: 0 0 0 6px rgba(255,101,52,.16);
+  --inner-field: inset 0 0 0 1px rgba(255,255,255,.08);
+
+  /* ============ MOTION ============ */
+  --ease-out: cubic-bezier(.2,.7,.2,1);
+  --ease-in-out: cubic-bezier(.6,.05,.3,1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 360ms;
+
+  /* ============ LAYOUT ============ */
+  --container: 1200px;
+  --gutter: 24px;
+}
+
+/* ============ SEMANTIC ELEMENT STYLES ============ */
+html, body {
+  background: var(--bg-page);
+  color: var(--fg-1);
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, .h1 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-extra);
+  font-size: var(--fs-h1);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.02em;
+}
+h2, .h2 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-snug);
+  letter-spacing: -0.01em;
+}
+h3, .h3 {
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-snug);
+}
+h4, .h4 {
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h4);
+  line-height: var(--lh-snug);
+}
+.eyebrow {
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: var(--fw-semibold);
+  color: var(--fg-3);
+}
+.hero-display {
+  font-family: var(--font-display);
+  font-weight: var(--fw-extra);
+  font-size: var(--fs-hero);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.025em;
+}
+.hero-display .accent { color: var(--orange-500); }
+
+p, .p { font-size: var(--fs-base); line-height: var(--lh-relaxed); color: var(--fg-2); }
+.p-lg { font-size: var(--fs-lg); line-height: var(--lh-relaxed); }
+.p-sm { font-size: var(--fs-sm); }
+small, .caption { font-size: var(--fs-xs); color: var(--fg-3); }
+code, .code, kbd { font-family: var(--font-mono); font-size: 0.92em; }

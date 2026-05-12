@@ -1,0 +1,27 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_preview.css">
+<style>
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:10px; height:52px; padding:0 22px; border-radius:16px; font-family:var(--font-sans); font-weight:600; font-size:15px; border:0; cursor:pointer; transition:all 200ms cubic-bezier(.2,.7,.2,1); }
+  .btn-primary { background: var(--orange-500); color:#fff; box-shadow:0 10px 24px -6px rgba(255,101,52,.55); }
+  .btn-primary:hover { background: var(--orange-600); transform: translateY(-1px); }
+  .btn-secondary { background: transparent; color:#fff; border:1px solid rgba(255,255,255,.22); }
+  .btn-secondary:hover { background: rgba(255,255,255,.06); }
+  .btn-ghost { background: transparent; color: var(--fg-2); padding:0 12px; height:40px; }
+  .btn-ghost:hover { color:#fff; }
+  .arrow { width:22px; height:22px; border-radius:999px; background:rgba(255,255,255,.18); display:inline-flex; align-items:center; justify-content:center; font-size:13px; }
+  .btn-secondary .arrow { background: var(--orange-500); }
+  .row-b { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+</style></head>
+<body>
+<div class="card">
+  <div class="label">Buttons · 52h · radius 16 · weight 600</div>
+  <div class="row-b">
+    <button class="btn btn-primary">Book Free Trial <span class="arrow">→</span></button>
+    <button class="btn btn-secondary">View Courses <span class="arrow">▶</span></button>
+    <button class="btn btn-ghost">Learn more</button>
+  </div>
+  <div class="row-b">
+    <button class="btn btn-primary" style="width:100%">Start My Journey <span class="arrow">→</span></button>
+  </div>
+</div>
+</body></html>

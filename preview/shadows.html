@@ -1,0 +1,20 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_preview.css">
+<style>
+  .row-s { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .blk { height: 96px; background: var(--bg-surface); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 11px; color: var(--fg-2); }
+</style></head>
+<body>
+<div class="card">
+  <div class="label">Elevation system</div>
+  <div class="row-s">
+    <div class="blk" style="box-shadow:0 1px 2px rgba(0,0,0,.4)">shadow-1</div>
+    <div class="blk" style="box-shadow:0 6px 18px rgba(0,0,0,.35)">shadow-2</div>
+    <div class="blk" style="box-shadow:0 18px 48px rgba(0,0,0,.45)">shadow-3 (cards)</div>
+  </div>
+  <div class="row-s" style="grid-template-columns: 1fr 1fr">
+    <div class="blk" style="background:var(--orange-500); color:#fff; box-shadow:0 10px 24px -6px rgba(255,101,52,.55)">shadow-cta</div>
+    <div class="blk" style="background:var(--orange-500); color:#fff; box-shadow:0 0 0 6px rgba(255,101,52,.16)">glow-orange (focus)</div>
+  </div>
+</div>
+</body></html>

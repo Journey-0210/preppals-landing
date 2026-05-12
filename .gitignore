@@ -1,0 +1,9 @@
+# Claude Code internals
+.claude/worktrees/
+.claude/settings.local.json
+
+# Netlify build cache
+.netlify/
+
+# Skill files
+SKILL.md

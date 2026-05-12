@@ -61,6 +61,9 @@ main{position:relative;z-index:2}
 .brand .wm span{font-size:10px;color:var(--fg-3);margin-top:3px;letter-spacing:.04em}
 .nav-cta{height:40px;padding:0 18px;border-radius:999px;background:var(--coral);color:#fff;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:6px;transition:all 200ms;}
 .nav-cta:hover{background:var(--coral-2);transform:translateY(-1px);box-shadow:0 10px 24px -8px rgba(255,101,52,.6)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.lang-btn{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--stroke-2);color:var(--fg-2);font-weight:600;font-size:12px;display:inline-flex;align-items:center;gap:6px;transition:all 200ms;letter-spacing:.04em;text-decoration:none;background:transparent}
+.lang-btn:hover{border-color:var(--stroke-2);background:rgba(255,255,255,.07);color:#fff}
 
 /* Hero */
 .hero{padding:140px 0 80px;position:relative}
@@ -337,7 +340,13 @@ footer{padding:36px 0;border-top:1px solid var(--stroke-1);text-align:center;fon
       <span>Prepare with Pals, Power your Progress.</span>
     </div>
   </a>
-  <a href="#" class="nav-cta" onclick="openRegModal();return false;">Register Free <span>→</span></a>
+  <div class="nav-right">
+    <a href="/" class="lang-btn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      中文
+    </a>
+    <a href="#" class="nav-cta" onclick="openRegModal();return false;">Register Free <span>→</span></a>
+  </div>
 </nav>
 
 <main>
@@ -386,7 +395,7 @@ footer{padding:36px 0;border-top:1px solid var(--stroke-1);text-align:center;fon
   <div class="container">
     <div class="hero-grid">
       <div>
-        <div class="badge"><span class="pulse"></span> CSCA Math · May 10 (Sun) Free Trial Class</div>
+        <div class="badge"><span class="pulse"></span> CSCA Math · May 17 (Sun) Free Trial Class</div>
         <h1 class="h1">
           Preparing for CSCA Math?<br/>
           You might be studying<br/>
@@ -414,7 +423,7 @@ footer{padding:36px 0;border-top:1px solid var(--stroke-1);text-align:center;fon
         <form class="reg" id="regForm" name="trial-signup" method="POST" data-netlify="true">
           <input type="hidden" name="form-name" value="trial-signup" />
           <h3>Claim Your Free Spot</h3>
-          <p class="sub">May 10 (Sun) 20:00 · 100% Free · Live on Zoom</p>
+          <p class="sub">May 17 (Sun) 20:00 · 100% Free · Live on Zoom</p>
 
           <div class="field">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -611,7 +620,7 @@ footer{padding:36px 0;border-top:1px solid var(--stroke-1);text-align:center;fon
     <div class="course-grid">
       <div class="course-row reveal-up">
         <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
-        <div><div class="lbl">Date</div><div class="val">May 10 (Sunday)</div></div>
+        <div><div class="lbl">Date</div><div class="val">May 17 (Sunday)</div></div>
       </div>
       <div class="course-row reveal-up">
         <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
@@ -686,7 +695,7 @@ footer{padding:36px 0;border-top:1px solid var(--stroke-1);text-align:center;fon
     <form class="reg" id="modalForm" name="trial-signup" method="POST" data-netlify="true">
       <input type="hidden" name="form-name" value="trial-signup" />
       <h3>Claim Your Free Spot</h3>
-      <p class="sub">May 10 (Sun) 20:00 · 100% Free · Live on Zoom</p>
+      <p class="sub">May 17 (Sun) 20:00 · 100% Free · Live on Zoom</p>
       <div class="field">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <input type="text" name="name" placeholder="Full Name" required />
