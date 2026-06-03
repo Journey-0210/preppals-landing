@@ -86,6 +86,27 @@ main{position:relative;z-index:2}
 .lede{font-family:var(--cn);font-style:italic;font-size:clamp(15px,1.4vw,18px);color:var(--coral);margin-bottom:18px;line-height:1.5;font-weight:500}
 .body-lg{font-family:var(--cn);font-size:18px;color:rgba(255,255,255,.82);font-weight:400;margin-bottom:12px;max-width:520px;line-height:1.65}
 .hero-detail{font-family:var(--cn);font-size:14px;color:var(--fg-2);font-weight:400;margin-bottom:32px;line-height:1.6;opacity:.85}
+
+/* ── B variant hero v2 ── */
+.hb-headline{font-family:var(--cn);font-size:clamp(34px,4.5vw,54px);font-weight:900;color:#fff;line-height:1.1;letter-spacing:-.02em;margin-bottom:14px}
+.hb-sub{font-family:var(--cn);font-size:clamp(14px,1.3vw,16px);color:var(--fg-3);font-weight:400;line-height:1.65;margin-bottom:28px;max-width:440px}
+.hb-sub strong{color:var(--fg-2);font-weight:600}
+.hb-chips{display:flex;flex-direction:column;gap:9px;margin-bottom:30px}
+.hb-chip{display:flex;align-items:center;gap:11px;padding:12px 16px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);transition:background 180ms}
+.hb-chip:hover{background:rgba(255,255,255,.07)}
+.hb-chip-icon{width:20px;height:20px;border-radius:50%;background:rgba(255,101,52,.12);border:1px solid rgba(255,101,52,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--coral)}
+.hb-chip-text{font-family:var(--cn);font-size:14px;font-weight:500;color:var(--fg-2);line-height:1.3}
+.hb-cta-block{display:flex;flex-direction:column;gap:10px;margin-bottom:22px}
+.hb-primary-btn{display:flex;align-items:center;justify-content:center;gap:8px;height:56px;border-radius:14px;background:var(--coral);color:#fff;font-family:var(--cn);font-weight:800;font-size:16px;transition:all 220ms;box-shadow:0 16px 40px -12px rgba(255,101,52,.55);cursor:pointer;text-decoration:none}
+.hb-primary-btn:hover{background:var(--coral-2);transform:translateY(-2px);box-shadow:0 20px 44px -12px rgba(255,101,52,.75)}
+.hb-primary-tag{font-family:var(--cn);font-size:11px;font-weight:700;background:rgba(0,0,0,.22);border-radius:6px;padding:3px 8px;white-space:nowrap}
+.hb-wa-btn{display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--fg-3);font-family:var(--cn);font-weight:600;font-size:14px;text-decoration:none;transition:all 220ms}
+.hb-wa-btn:hover{background:rgba(255,255,255,.09);color:var(--fg-2)}
+.hb-proof{display:flex;align-items:center;gap:10px;font-size:13px;flex-wrap:wrap}
+.hb-proof-main{font-family:var(--cn);color:var(--fg-2);font-weight:600}
+.hb-proof-sep{width:1px;height:13px;background:rgba(255,255,255,.15)}
+.hb-proof-meta{font-family:var(--cn);color:var(--fg-4);font-size:12px}
+@media(max-width:767px){.hb-headline{font-size:clamp(30px,8.5vw,42px)}.hb-sub{font-size:13.5px;margin-bottom:20px}.hb-chips{gap:7px;margin-bottom:22px}.hb-chip{padding:10px 13px}.hb-chip-text{font-size:13px}.hb-primary-btn{height:54px;font-size:15px;border-radius:12px}.hb-wa-btn{height:44px;font-size:13px;border-radius:12px}.hb-proof-meta{display:none}}
 .hero-trust{display:flex;align-items:center;gap:16px;margin-bottom:28px;flex-wrap:wrap}
 .hero-trust span{display:flex;align-items:center;gap:5px;font-family:var(--cn);font-size:13px;color:var(--fg-3);font-weight:500}
 .hero-trust span::before{content:"✓";color:#25D366;font-weight:800;font-size:14px}
@@ -352,7 +373,7 @@ footer{padding:52px 0 36px;border-top:1px solid var(--stroke-1);text-align:cente
     </div>
   </a>
   <div class="nav-right">
-    <a href="/en" class="lang-btn">
+    <a href="/en-trial" class="lang-btn">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       EN
     </a>
@@ -407,23 +428,36 @@ footer{padding:52px 0 36px;border-top:1px solid var(--stroke-1);text-align:cente
     <div class="hero-grid">
       <div>
         <div class="badge"><span class="pulse"></span> CSCA 数学 · 5月31日（周日）免费试听课</div>
-        <h1 class="h1">
-          你备考 CSCA 数学，<br/>
-          方向可能从<br class="mobile-br"/><span class="accent">一开始就错了</span>
-        </h1>
-        <p class="body-lg">很多海外学生用国际课程思维准备，<br/>但 CSCA 数学更接近中国课程体系。</p>
-        <p class="hero-detail">75分钟<span style="color:var(--coral);font-weight:800;font-size:26px;">免费试听课</span>，告诉你该读什么、怎么读、先读什么。</p>
-        <div class="proof">
-          <div class="avatars">
-            <div class="av a1">A</div>
-            <div class="av a2">S</div>
-            <div class="av a3">D</div>
-            <div class="av a4">L</div>
+        <div class="hb-headline">CSCA 数学<br>精讲公开课</div>
+        <div class="hb-sub">免费 <strong>75分钟直播课</strong>，专为 CSCA 备考生打造。</div>
+        <div class="hb-chips">
+          <div class="hb-chip">
+            <div class="hb-chip-icon"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></div>
+            <span class="hb-chip-text">CSCA 高频考点全覆盖</span>
           </div>
-          <span><b>1,000+</b> 名学生已加入 PrepPals 社群备考</span>
+          <div class="hb-chip">
+            <div class="hb-chip-icon"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></div>
+            <span class="hb-chip-text">直播解题，思路清晰易懂</span>
+          </div>
+          <div class="hb-chip">
+            <div class="hb-chip-icon"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg></div>
+            <span class="hb-chip-text">免费附赠三角函数速查表</span>
+          </div>
         </div>
-        <div class="sp-real-count" id="spRealCount">
-          <span class="sp-real-dot"></span>已有 <b id="spCount">0</b> 位同学报名试听课
+        <div class="hb-cta-block">
+          <a href="#" class="hb-primary-btn" onclick="openRegModal();return false;">
+            立即预约免费名额 <span class="hb-primary-tag">仅剩12席</span>
+          </a>
+          <a class="hb-wa-btn" href="https://wa.me/8618813052817?text=%E4%BD%A0%E5%A5%BD%EF%BC%81%E6%88%91%E6%83%B3%E4%BA%86%E8%A7%A3PrepPals%E7%9A%845%E6%9C%8831%E6%97%A5CSCA%E6%95%B0%E5%AD%A6%E5%85%8D%E8%B4%B9%E5%85%AC%E5%BC%80%E8%AF%BE%EF%BC%8C%E8%AF%B7%E9%97%AE%E6%80%8E%E4%B9%88%E6%8A%A5%E5%90%8D%EF%BC%9F" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            有疑问？WhatsApp咨询
+          </a>
+        </div>
+        <div class="hb-proof" id="spRealCount">
+          <span>🔥</span>
+          <span class="hb-proof-main">已有 <b id="spCount">45</b>+ 同学报名</span>
+          <span class="hb-proof-sep"></span>
+          <span class="hb-proof-meta">已帮助22名学生 · 平均分87.5–100</span>
         </div>
       </div>
 
@@ -641,7 +675,7 @@ footer{padding:52px 0 36px;border-top:1px solid var(--stroke-1);text-align:cente
       </div>
       <div class="course-row reveal-up">
         <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div><div class="lbl">时间</div><div class="val">20:00（北京时间 GMT+8）</div></div>
+        <div><div class="lbl">时间</div><div class="val">17:00（北京时间 GMT+8）</div></div>
       </div>
       <div class="course-row reveal-up">
         <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
@@ -773,7 +807,7 @@ footer{padding:52px 0 36px;border-top:1px solid var(--stroke-1);text-align:cente
 </div>
 
 <div class="mobile-bar">
-  <a href="#" onclick="openRegModal();return false;">免费报名 <span>→</span></a>
+  <a href="#" onclick="openRegModal();return false;">0元预约 · 仅剩12席位 <span>→</span></a>
 </div>
 
 <a class="wa-btn" href="https://wa.me/8618813052817?text=%E4%BD%A0%E5%A5%BD%EF%BC%81%E6%88%91%E6%83%B3%E4%BA%86%E8%A7%A3PrepPals%E7%9A%845%E6%9C%8831%E6%97%A5CSCA%E6%95%B0%E5%AD%A6%E5%85%8D%E8%B4%B9%E5%85%AC%E5%BC%80%E8%AF%BE%EF%BC%8C%E8%AF%B7%E9%97%AE%E6%80%8E%E4%B9%88%E6%8A%A5%E5%90%8D%EF%BC%9F" target="_blank" rel="noopener">

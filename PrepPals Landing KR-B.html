@@ -1,0 +1,909 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<title>CSCA PrepPals · 무료 수학 공개 수업</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" />
+<style>
+:root {
+  --navy-950:#050b1a; --navy-900:#0a1124; --navy-800:#111a33; --navy-700:#1a2545;
+  --navy-600:#243056; --stroke-1:rgba(255,255,255,.08); --stroke-2:rgba(255,255,255,.16);
+  --coral:#ff6534; --coral-2:#ee4f1f; --gold:#f5b942;
+  --fg-1:#fff; --fg-2:rgba(255,255,255,.78); --fg-3:rgba(255,255,255,.56); --fg-4:rgba(255,255,255,.36);
+  --serif:"Playfair Display", Georgia, serif;
+  --sans:"DM Sans", -apple-system, sans-serif;
+  --kr:"Noto Sans KR", "DM Sans", -apple-system, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--navy-950);color:var(--fg-1);font-family:var(--kr);line-height:1.6;-webkit-font-smoothing:antialiased}
+body{overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+.container{max-width:1240px;margin:0 auto;padding:0 32px}
+
+/* Background canvas */
+#mathCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:1;transform:translateZ(0);will-change:transform;backface-visibility:hidden}
+@media(max-width:767px){#mathCanvas{display:none}}
+.bg-vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(1400px 900px at 75% 15%, rgba(255,101,52,.14), transparent 60%),
+    radial-gradient(1000px 800px at 12% 70%, rgba(35,49,134,.22), transparent 60%);
+}
+.hero-math{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.hero-math .g{position:absolute;color:rgba(255,255,255,.09);user-select:none;animation:float 11s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(255,101,52,.15))}
+.hero-math .g.coral{color:rgba(255,101,52,.22)}
+.hero-math .glyph{font-family:var(--serif);font-style:italic;font-weight:700}
+.hero-math .g1{top:10%;left:4%;font-size:130px;animation-delay:-1s}
+.hero-math .g2{top:66%;left:6%;width:120px;animation-delay:-3s}
+.hero-math .g3{top:14%;right:44%;width:90px;animation-delay:-5s}
+.hero-math .g4{top:74%;left:40%;width:110px;animation-delay:-2s}
+.hero-math .g5{top:6%;right:30%;font-size:64px;animation-delay:-4s}
+.hero-math .g6{top:48%;left:46%;width:80px;animation-delay:-6s}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-16px) rotate(4deg)}}
+main{position:relative;z-index:2}
+
+/* Top nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 40px;transition:all 240ms ease;
+}
+.nav.scrolled{background:rgba(8,12,28,.78);backdrop-filter:blur(14px);border-bottom:1px solid var(--stroke-1);padding:12px 40px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:38px;height:auto}
+.brand .wm{display:flex;flex-direction:column;line-height:1}
+.brand .wm b{font-size:16px;font-weight:800;letter-spacing:-.01em;font-family:var(--sans)}
+.brand .wm span{font-size:10px;color:var(--fg-3);margin-top:3px;letter-spacing:.04em;font-family:var(--sans)}
+.nav-cta{height:40px;padding:0 18px;border-radius:999px;background:var(--coral);color:#fff;font-weight:700;font-size:13px;display:inline-flex;align-items:center;gap:6px;transition:all 200ms;font-family:var(--kr)}
+.nav-cta:hover{background:var(--coral-2);transform:translateY(-1px);box-shadow:0 10px 24px -8px rgba(255,101,52,.6)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.lang-btn{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--stroke-2);color:var(--fg-2);font-weight:600;font-size:12px;display:inline-flex;align-items:center;gap:6px;transition:all 200ms;letter-spacing:.04em;text-decoration:none;background:transparent;font-family:var(--sans)}
+.lang-btn:hover{border-color:var(--stroke-2);background:rgba(255,255,255,.07);color:#fff}
+
+/* Hero */
+.hero{padding:140px 0 80px;position:relative}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center}
+
+.pulse{width:8px;height:8px;border-radius:50%;background:var(--coral);position:relative}
+.pulse::after{content:"";position:absolute;inset:-4px;border-radius:50%;background:var(--coral);opacity:.5;animation:pulse 1.6s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.6);opacity:.6}100%{transform:scale(2.2);opacity:0}}
+
+/* ── B variant hero (KR-B) ── */
+.hb-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 10px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(10px);font-family:var(--kr);font-size:12px;font-weight:500;color:var(--fg-2);margin-bottom:24px}
+.hb-headline{font-family:var(--kr);font-size:clamp(38px,4.8vw,58px);font-weight:900;color:#fff;line-height:1.08;letter-spacing:-.025em;margin-bottom:14px;text-shadow:0 6px 30px rgba(0,0,0,.5)}
+.hb-accent{color:var(--coral);display:block}
+.hb-sub{font-family:var(--kr);font-size:15px;color:var(--fg-3);font-weight:400;margin-bottom:28px;line-height:1.65}
+.hb-chips{display:flex;flex-direction:column;gap:9px;margin-bottom:30px}
+.hb-chip{display:flex;align-items:center;gap:11px;padding:12px 16px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
+.hb-chip-icon{width:20px;height:20px;border-radius:50%;background:rgba(255,101,52,.12);border:1px solid rgba(255,101,52,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hb-chip-text{font-family:var(--kr);font-size:14px;color:var(--fg-2);font-weight:500}
+.hb-cta-block{display:flex;flex-direction:row;align-items:center;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+.hb-primary-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:56px;padding:0 28px;border-radius:14px;background:var(--coral);color:#fff;font-family:var(--kr);font-weight:700;font-size:16px;text-decoration:none;transition:all 220ms;box-shadow:0 12px 28px -8px rgba(255,101,52,.55);cursor:pointer;border:0;white-space:nowrap}
+.hb-primary-btn:hover{background:var(--coral-2);transform:translateY(-2px);box-shadow:0 20px 36px -8px rgba(255,101,52,.7)}
+.hb-primary-tag{background:rgba(0,0,0,.25);border-radius:99px;padding:3px 10px;font-size:12px;font-weight:600;letter-spacing:.02em;white-space:nowrap}
+.hb-wa-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:56px;padding:0 24px;border-radius:14px;background:#25D366;color:#fff;font-family:var(--kr);font-weight:700;font-size:15px;text-decoration:none;transition:all 220ms;box-shadow:0 12px 28px -8px rgba(37,211,102,.5);white-space:nowrap}
+.hb-wa-btn:hover{background:#1ebe5d;transform:translateY(-2px);box-shadow:0 18px 36px -8px rgba(37,211,102,.65)}
+.hb-proof{display:flex;align-items:center;gap:10px;font-family:var(--kr);font-size:13px;flex-wrap:wrap}
+.hb-proof-main{color:var(--fg-2)}
+.hb-proof-main b{color:#fff;font-weight:700}
+.hb-proof-sep{width:1px;height:13px;background:rgba(255,255,255,.2);flex-shrink:0}
+.hb-proof-meta{color:var(--fg-4);font-size:12px}
+
+/* Registration card */
+.reg{position:relative;background:rgba(255,255,255,.04);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border:1px solid var(--stroke-2);border-radius:24px;padding:32px;
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.6);
+}
+.reg::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg, var(--coral) 0%, var(--gold) 100%);
+  border-radius:24px 24px 0 0;
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform 420ms cubic-bezier(0.22,1,0.36,1);
+}
+.reg:hover::before{transform:scaleX(1)}
+.reg h3{font-family:var(--kr);font-size:20px;font-weight:700;margin-bottom:6px}
+.reg .sub{font-family:var(--kr);font-size:13px;color:var(--fg-3);margin-bottom:18px}
+
+/* ── Social proof toast ── */
+.sp-toast{position:fixed;bottom:28px;left:28px;z-index:250;display:none;align-items:center;gap:10px;padding:12px 18px;border-radius:14px;background:rgba(8,14,32,.96);border:1px solid rgba(255,255,255,.13);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 10px 48px rgba(0,0,0,.55);font-family:var(--kr);font-size:13px;color:rgba(255,255,255,.88);max-width:310px;line-height:1.4}
+.sp-toast.visible{display:flex;animation:toastIn 380ms cubic-bezier(.34,1.4,.64,1) both}
+@keyframes toastIn{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
+.sp-live-dot{width:8px;height:8px;border-radius:50%;background:#22c993;flex-shrink:0;box-shadow:0 0 8px rgba(34,201,147,.8);animation:livePulse 2s ease-in-out infinite}
+@keyframes livePulse{0%,100%{opacity:1;box-shadow:0 0 8px rgba(34,201,147,.7)}50%{opacity:.45;box-shadow:0 0 3px rgba(34,201,147,.3)}}
+.sp-toast-text{transition:transform 280ms ease,opacity 280ms ease}
+.sp-toast-text.out{transform:translateY(-7px);opacity:0}
+.sp-toast-text.in{transform:translateY(7px);opacity:0}
+.sp-toast-text.show{transform:translateY(0);opacity:1}
+@media(max-width:767px){.sp-toast{display:none!important}}
+
+.bar{height:8px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;position:relative}
+.bar-fill{height:100%;width:73%;background:linear-gradient(90deg,var(--coral),var(--gold));border-radius:999px;position:relative;overflow:hidden}
+.bar-fill::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);transform:translateX(-100%);animation:shimmer 2.4s infinite}
+@keyframes shimmer{100%{transform:translateX(100%)}}
+
+.field{display:flex;align-items:center;gap:10px;height:50px;padding:0 14px;
+  background:rgba(255,255,255,.04);border:1px solid var(--stroke-1);border-radius:12px;
+  margin-bottom:10px;transition:all 160ms;
+}
+.field:focus-within{border-color:var(--coral);box-shadow:0 0 0 3px rgba(255,101,52,.18);background:rgba(255,255,255,.06)}
+.field svg{color:var(--coral);flex:0 0 16px}
+.field input,.field select{flex:1;background:none;border:0;outline:0;color:#fff;font-family:var(--kr);font-size:14px;}
+.field select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' stroke='%23ffffff80' fill='none' stroke-width='1.5'/></svg>");background-repeat:no-repeat;background-position:right 0 center;color-scheme:dark}
+.field select option{background:#111a33;color:#fff}
+.field input::placeholder{color:var(--fg-4)}
+.field input{color-scheme:dark}
+
+.cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;height:54px;border-radius:14px;background:var(--coral);color:#fff;font-family:var(--kr);font-weight:700;font-size:15px;margin-top:6px;transition:all 200ms;box-shadow:0 12px 28px -8px rgba(255,101,52,.55);}
+.cta:hover{background:var(--coral-2);transform:translateY(-2px) scale(1.01);box-shadow:0 18px 36px -8px rgba(255,101,52,.7), 0 0 0 6px rgba(255,101,52,.12)}
+.cta:active{transform:translateY(0) scale(.99)}
+.fineprint{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;font-family:var(--kr);font-size:11.5px;color:var(--fg-4)}
+
+/* Stats strip */
+.stats{margin:60px 0;padding:36px 0;background:rgba(8,12,28,.6);border-top:1px solid var(--stroke-1);border-bottom:1px solid var(--stroke-1);backdrop-filter:blur(8px)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.stat-c{text-align:center;padding:0 20px;border-right:1px solid var(--stroke-1)}
+.stat-c:last-child{border-right:0}
+.stat-c .n{font-family:var(--serif);font-weight:900;font-size:64px;line-height:1;background:linear-gradient(180deg,#fff 0%,var(--coral) 120%);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.02em}
+.stat-c .l{font-family:var(--kr);font-size:13px;color:var(--fg-3);margin-top:10px;font-weight:400}
+
+/* General section */
+section.s{padding:100px 0;position:relative}
+.eye{font-family:var(--kr);font-size:13px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--coral);margin-bottom:18px;display:inline-block}
+.s-title{font-family:var(--kr);font-weight:900;font-size:clamp(36px,4.2vw,56px);line-height:1.18;letter-spacing:-.02em;margin-bottom:18px;display:inline-block;position:relative}
+.s-title.reveal{clip-path:inset(0 100% 0 0)}
+.s-title.reveal.in{clip-path:inset(0 0% 0 0);transition:clip-path 1s cubic-bezier(.7,0,.3,1)}
+.s-sub{font-family:var(--kr);font-size:16px;color:var(--fg-2);max-width:620px;line-height:1.75;margin-bottom:56px;font-weight:300;margin-top:6px}
+
+.reveal-up{opacity:0;transform:translateY(30px);transition:opacity 700ms ease, transform 700ms cubic-bezier(.2,.7,.2,1)}
+.reveal-up.in{opacity:1;transform:none}
+
+/* Cards */
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{position:relative;padding:32px 28px 28px;border-radius:20px;background:rgba(255,255,255,.03);border:1px solid var(--stroke-1);overflow:hidden;transition:all 280ms cubic-bezier(.2,.7,.2,1)}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--coral);transform:scaleX(0);transform-origin:left;transition:transform 360ms}
+.card:hover{transform:translateY(-6px);border-color:var(--stroke-2);background:rgba(255,255,255,.05)}
+.card:hover::before{transform:scaleX(1)}
+.card .num{position:absolute;top:14px;right:18px;font-family:var(--serif);font-weight:900;font-size:80px;line-height:1;color:rgba(255,255,255,.04);letter-spacing:-.04em}
+.card .ic{width:44px;height:44px;border-radius:12px;background:rgba(255,101,52,.14);color:var(--coral);display:flex;align-items:center;justify-content:center;margin-bottom:18px;position:relative}
+.card h4{font-family:var(--kr);font-size:18px;font-weight:700;margin-bottom:10px;position:relative}
+.card p{font-family:var(--kr);font-size:14px;color:var(--fg-2);font-weight:300;margin-bottom:18px;line-height:1.7;position:relative}
+.tag{display:inline-block;padding:5px 11px;border-radius:999px;background:rgba(255,101,52,.12);color:var(--coral);font-family:var(--kr);font-size:11.5px;font-weight:600}
+
+/* Before/After */
+.ba-wrap{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--stroke-2);user-select:none;height:520px}
+.ba-side{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center}
+.ba-side .ba-inner{padding:48px 56px;width:100%}
+.ba-before{background:linear-gradient(135deg,#0a1124,#111a33);filter:saturate(.6) brightness(.85)}
+.ba-after{background:linear-gradient(135deg,#1a1220,#2a1810);clip-path:inset(0 0 0 50%)}
+.ba-after .ba-inner{margin-left:50%;padding:48px 56px 48px 40px;width:50%}
+.ba-label{display:inline-flex;align-items:center;gap:8px;font-family:var(--kr);font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:24px}
+.ba-before .ba-label{color:var(--fg-3)}
+.ba-after .ba-label{color:var(--coral)}
+.ba-list{list-style:none;display:flex;flex-direction:column;gap:14px}
+.ba-list li{display:flex;align-items:flex-start;gap:14px;font-family:var(--kr);font-size:14px;line-height:1.6}
+.ba-before li{color:var(--fg-3)}
+.ba-after li{color:var(--fg-1)}
+.ba-mark{flex:0 0 24px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:1px;font-family:var(--sans)}
+.ba-before .ba-mark{background:rgba(255,255,255,.06);color:var(--fg-4)}
+.ba-after .ba-mark{background:var(--coral);color:#fff}
+.ba-divider{position:absolute;top:0;bottom:0;left:50%;width:2px;background:rgba(255,255,255,.4);z-index:3;transform:translateX(-1px)}
+.ba-handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:var(--coral);display:flex;align-items:center;justify-content:center;cursor:ew-resize;z-index:4;box-shadow:0 8px 24px rgba(255,101,52,.5),0 0 0 4px rgba(255,101,52,.2)}
+.ba-handle:hover{transform:translate(-50%,-50%) scale(1.1)}
+
+/* Results */
+.results-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.score-card{padding:40px 36px;border-radius:24px;background:linear-gradient(180deg,rgba(255,101,52,.05),rgba(255,255,255,.02));border:1px solid var(--stroke-2)}
+.score-big{font-family:var(--serif);font-weight:900;font-size:140px;line-height:1;letter-spacing:-.04em;background:linear-gradient(180deg,#fff,var(--coral));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:8px}
+.score-card .lbl{font-family:var(--kr);font-size:14px;color:var(--fg-2);margin-bottom:24px}
+.score-divider{height:1px;background:var(--stroke-1);margin:20px 0}
+.score-row{display:flex;justify-content:space-between;padding:12px 0;font-family:var(--kr);font-size:15px;border-bottom:1px solid var(--stroke-1)}
+.score-row:last-of-type{border-bottom:0}
+.score-row.hi{color:var(--coral);font-weight:700}
+.score-row.hi .v{font-family:var(--serif);font-size:20px;font-weight:900}
+.score-row .v{font-family:var(--serif);font-weight:700;color:var(--fg-1)}
+.score-fine{margin-top:18px;font-family:var(--kr);font-size:12px;color:var(--fg-4);font-style:italic}
+.testis{display:flex;flex-direction:column;gap:16px}
+.testi{padding:24px 26px;border-radius:18px;background:rgba(255,255,255,.03);border:1px solid var(--stroke-1)}
+.stars{color:var(--gold);font-size:14px;letter-spacing:2px;margin-bottom:10px}
+.testi .q{font-family:var(--kr);font-size:14px;color:var(--fg-2);line-height:1.7;margin-bottom:14px}
+.testi .who{display:flex;align-items:center;gap:12px}
+.testi .who .av{width:36px;height:36px;font-size:12px}
+.testi .who b{font-family:var(--kr);font-size:13px;font-weight:700}
+.testi .who span{font-family:var(--kr);font-size:11.5px;color:var(--fg-3)}
+
+/* Course details */
+.course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.course-row{display:flex;align-items:center;gap:14px;padding:20px 22px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid var(--stroke-1)}
+.course-row .ic{width:38px;height:38px;border-radius:10px;background:rgba(255,101,52,.14);color:var(--coral);display:flex;align-items:center;justify-content:center;flex:0 0 38px}
+.course-row .lbl{font-family:var(--kr);font-size:12px;color:var(--fg-3);margin-bottom:2px}
+.course-row .val{font-family:var(--kr);font-size:14px;font-weight:600}
+.course-row.hi{border-color:rgba(255,101,52,.4);background:rgba(255,101,52,.06)}
+.course-row.hi .val{color:var(--coral)}
+
+/* Avatars (for testimonials) */
+.av{width:36px;height:36px;border-radius:50%;border:2px solid var(--navy-900);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;font-family:var(--sans)}
+.av.a1{background:linear-gradient(135deg,#ff6534,#ee4f1f)}
+.av.a2{background:linear-gradient(135deg,#4ea3ff,#2a3aa3)}
+.av.a3{background:linear-gradient(135deg,#22c993,#0e8a64)}
+.av.a4{background:linear-gradient(135deg,#f5b942,#c98717)}
+
+/* FAQ */
+.faqs{display:flex;flex-direction:column;gap:12px;max-width:820px}
+.faq{border:1px solid var(--stroke-1);border-radius:14px;background:rgba(255,255,255,.025);overflow:hidden;transition:all 240ms}
+.faq summary{list-style:none;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:var(--kr);font-size:15px;font-weight:600}
+.faq summary::-webkit-details-marker{display:none}
+.faq .plus{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.06);color:var(--fg-2);display:flex;align-items:center;justify-content:center;font-size:18px;transition:transform 280ms,background 240ms;flex-shrink:0}
+.faq[open]{border-color:var(--stroke-2);background:rgba(255,255,255,.04)}
+.faq[open] .plus{transform:rotate(45deg);background:var(--coral);color:#fff}
+.faq .ans{padding:0 24px 22px;font-family:var(--kr);font-size:14px;color:var(--fg-2);line-height:1.75;font-weight:300}
+
+/* Final CTA */
+.final-cta{padding:120px 0;text-align:center;background:radial-gradient(ellipse at center,rgba(255,101,52,.18),transparent 60%);position:relative}
+.final-cta h2{font-family:var(--kr);font-weight:900;font-size:clamp(28px,3.6vw,48px);line-height:1.25;margin-bottom:18px}
+.final-cta p{font-family:var(--kr);font-size:17px;color:var(--fg-2);margin-bottom:36px;font-weight:300;line-height:1.8}
+.final-btn{display:inline-flex;align-items:center;gap:10px;height:60px;padding:0 36px;border-radius:999px;background:var(--coral);color:#fff;font-family:var(--kr);font-weight:700;font-size:16px;transition:all 240ms;box-shadow:0 16px 40px -8px rgba(255,101,52,.55)}
+.final-btn:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 24px 50px -8px rgba(255,101,52,.7),0 0 0 8px rgba(255,101,52,.14);background:var(--coral-2)}
+
+/* WhatsApp floating */
+.wa-btn{position:fixed;bottom:32px;right:32px;z-index:200;display:flex;align-items:center;gap:10px;background:#25D366;color:#fff;font-weight:700;font-size:14px;padding:0 20px 0 14px;height:52px;border-radius:999px;box-shadow:0 8px 28px rgba(37,211,102,.45);text-decoration:none;transition:all 220ms;white-space:nowrap;font-family:var(--kr)}
+.wa-btn:hover{background:#1ebe5d;transform:translateY(-2px);box-shadow:0 14px 36px rgba(37,211,102,.55)}
+.wa-btn svg{flex-shrink:0}
+@media(max-width:767px){.wa-btn{bottom:84px;right:16px;padding:0 16px 0 12px;height:48px;font-size:13px}}
+
+/* Sticky mobile bar */
+.mobile-bar{display:none}
+
+/* Modal */
+.modal-backdrop{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:rgba(5,11,26,.80);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  opacity:0;pointer-events:none;transition:opacity 280ms ease;}
+.modal-backdrop.open{opacity:1;pointer-events:all}
+.modal-box{position:relative;width:100%;max-width:460px;
+  transform:translateY(28px) scale(.96);transition:transform 340ms cubic-bezier(.34,1.4,.64,1);}
+.modal-backdrop.open .modal-box{transform:translateY(0) scale(1)}
+.modal-close{position:absolute;top:-14px;right:-14px;width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,.10);border:1px solid var(--stroke-2);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  color:var(--fg-2);font-size:20px;line-height:1;transition:background 180ms;z-index:1}
+.modal-close:hover{background:rgba(255,255,255,.22)}
+
+/* Footer */
+footer{padding:52px 0 36px;border-top:1px solid var(--stroke-1);text-align:center;font-family:var(--sans);font-size:12px;color:var(--fg-4)}
+.footer-links{display:flex;align-items:center;justify-content:center;gap:28px;margin-bottom:20px;flex-wrap:wrap}
+.footer-link{display:inline-flex;align-items:center;gap:7px;color:var(--fg-3);font-size:13px;text-decoration:none;transition:color 200ms;font-family:var(--sans)}
+.footer-link:hover{color:#fff}
+
+/* Success */
+.success{padding:36px 16px;text-align:center}
+.success .em{font-size:42px;margin-bottom:10px}
+.success h4{font-family:var(--kr);font-size:18px;font-weight:700;margin-bottom:8px}
+.success p{font-family:var(--kr);font-size:13px;color:var(--fg-3);line-height:1.7}
+
+/* Responsive */
+@media(max-width:920px){
+  .hero-grid{grid-template-columns:1fr;gap:36px}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:24px 0}
+  .stat-c:nth-child(2){border-right:0}
+  .stat-c{padding:18px 12px}
+  .cards3{grid-template-columns:1fr}
+  .results-grid{grid-template-columns:1fr}
+  .course-grid{grid-template-columns:1fr 1fr}
+  .nav{padding:14px 20px}
+  .nav-cta{display:none}
+  .container{padding:0 20px}
+  .mobile-bar{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:60;padding:12px 16px;background:rgba(8,12,28,.92);backdrop-filter:blur(14px);border-top:1px solid var(--stroke-2)}
+  .mobile-bar a{flex:1;height:48px;border-radius:12px;background:var(--coral);display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--kr);font-weight:700;font-size:14px;color:#fff}
+  body{padding-bottom:72px}
+  .hero{padding:100px 0 40px}
+  section.s{padding:64px 0}
+  .stat-c .n{font-size:48px}
+  .score-big{font-size:96px}
+  .ba-wrap{height:600px}
+}
+@media(max-width:767px){
+  .hb-cta-block{display:none}
+}
+@media(max-width:560px){
+  .course-grid{grid-template-columns:1fr}
+  .ba-wrap{height:auto;display:flex;flex-direction:column}
+  .ba-side{position:relative;inset:auto;flex:1}
+  .ba-side .ba-inner{padding:28px 20px;width:100%;max-width:100%!important}
+  .ba-before{border-radius:16px 16px 0 0}
+  .ba-after{clip-path:none!important;border-radius:0 0 16px 16px;border-top:1px solid rgba(255,255,255,.1)}
+  .ba-after .ba-inner{margin-left:0;width:100%;padding:28px 20px}
+  .ba-divider,.ba-handle{display:none}
+  .ba-list{gap:10px}
+  .ba-list li{font-size:13px;gap:10px}
+  .ba-label{margin-bottom:16px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="mathCanvas"></canvas>
+<div class="bg-vignette"></div>
+
+<nav class="nav" id="nav">
+  <a href="#" class="brand">
+    <img src="assets/preppals-logo.png" alt="PrepPals Logo" />
+    <div class="wm">
+      <b>PrepPals</b>
+      <span>Prepare with Pals, Power your Progress.</span>
+    </div>
+  </a>
+  <div class="nav-right">
+    <a href="/ko" class="lang-btn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      KO-A
+    </a>
+    <a href="#" class="nav-cta" onclick="openRegModal();return false;">무료 등록하기 <span>→</span></a>
+  </div>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-math" aria-hidden="true">
+    <span class="g g1 glyph coral">∫</span>
+    <svg class="g g2" viewBox="0 0 100 130" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="50" cy="18" r="6"/><line x1="50" y1="24" x2="22" y2="118"/><line x1="50" y1="24" x2="78" y2="118"/>
+      <path d="M22 118 l-4 8 M78 118 l4 8"/><line x1="35" y1="70" x2="65" y2="70"/>
+    </svg>
+    <svg class="g g3" viewBox="0 0 120 70" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+      <path d="M5 60 A55 55 0 0 1 115 60 Z"/>
+      <line x1="60" y1="60" x2="60" y2="12"/><line x1="30" y1="60" x2="35" y2="40"/>
+      <line x1="90" y1="60" x2="85" y2="40"/><line x1="15" y1="60" x2="22" y2="45"/><line x1="105" y1="60" x2="98" y2="45"/>
+    </svg>
+    <svg class="g g4 coral" viewBox="0 0 110 95" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round">
+      <path d="M8 88 L102 88 L8 14 Z"/><path d="M8 78 L18 78 L18 88"/>
+    </svg>
+    <span class="g g5 glyph">θ</span>
+    <svg class="g g6" viewBox="0 0 200 26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <rect x="3" y="4" width="194" height="18" rx="2"/>
+      <line x1="20" y1="4" x2="20" y2="14"/><line x1="40" y1="4" x2="40" y2="10"/>
+      <line x1="60" y1="4" x2="60" y2="14"/><line x1="80" y1="4" x2="80" y2="10"/>
+      <line x1="100" y1="4" x2="100" y2="14"/><line x1="120" y1="4" x2="120" y2="10"/>
+      <line x1="140" y1="4" x2="140" y2="14"/><line x1="160" y1="4" x2="160" y2="10"/>
+      <line x1="180" y1="4" x2="180" y2="14"/>
+    </svg>
+  </div>
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <!-- B variant hero -->
+        <div class="hb-badge"><span class="pulse"></span> CSCA 수학 · 5월 31일 (일) · 무료 라이브</div>
+        <div class="hb-headline">
+          CSCA 수학
+          <span class="hb-accent">무료 공개 수업</span>
+        </div>
+        <div class="hb-sub">CSCA 수험생을 위해 특별 설계된 <strong>75분 무료 라이브 수업</strong>입니다.</div>
+
+        <div class="hb-chips">
+          <div class="hb-chip">
+            <div class="hb-chip-icon">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#ff6534" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </div>
+            <span class="hb-chip-text">CSCA 고빈도 출제 유형 전체 정리</span>
+          </div>
+          <div class="hb-chip">
+            <div class="hb-chip-icon">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#ff6534" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </div>
+            <span class="hb-chip-text">라이브 풀이 — 실전 감각 즉시 향상</span>
+          </div>
+          <div class="hb-chip">
+            <div class="hb-chip-icon">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#ff6534" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </div>
+            <span class="hb-chip-text">삼각함수 공식표 무료 증정</span>
+          </div>
+        </div>
+
+        <div class="hb-cta-block">
+          <a href="#" class="hb-primary-btn" onclick="openRegModal();return false;">
+            무료 자리 지금 신청하기 <span class="hb-primary-tag">잔여 12석</span>
+          </a>
+          <a class="hb-wa-btn" href="https://wa.me/8618813052817?text=Hi%21%20I%27m%20interested%20in%20PrepPals%27%20free%20CSCA%20Math%20trial%20class%20on%20May%2031.%20How%20can%20I%20sign%20up%3F" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            WhatsApp 문의
+          </a>
+        </div>
+
+        <div class="hb-proof" id="spRealCount">
+          <span>🔥</span>
+          <span class="hb-proof-main">이미 <b id="spCount">45</b>명 신청 완료</span>
+          <span class="hb-proof-sep"></span>
+          <span class="hb-proof-meta">22명 지도 · 평균 87.5–100점</span>
+        </div>
+      </div>
+
+      <!-- 등록 카드 -->
+      <div id="register">
+        <form class="reg" id="regForm" name="trial-signup" method="POST" data-netlify="true">
+          <input type="hidden" name="form-name" value="trial-signup" />
+          <h3>무료 자리 지금 신청하기</h3>
+          <p class="sub">5월 31일 (일) 오후 5시 · 완전 무료 · Zoom 라이브</p>
+
+          <div class="field">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input type="text" name="name" placeholder="이름" required />
+          </div>
+          <div class="field">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+            <input type="text" name="country" placeholder="국가 (예: South Korea)" required />
+          </div>
+          <div class="field">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            <select name="exam_month" required>
+              <option value="">목표 시험 월</option>
+              <option>2026년 6월</option>
+              <option>2026년 12월</option>
+              <option>2027년</option>
+              <option>아직 미정</option>
+            </select>
+          </div>
+          <div class="field">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <select name="language" required>
+              <option value="">수업 언어 선택</option>
+              <option value="english">영어 수업</option>
+              <option value="chinese">중국어 수업 (中文)</option>
+            </select>
+          </div>
+          <div class="field">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <input type="tel" name="whatsapp" placeholder="WhatsApp 번호 (예: +82-10-1234-5678)" required />
+          </div>
+          <div class="field">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+            <input type="email" name="email" placeholder="이메일 주소" required />
+          </div>
+
+          <button class="cta" type="submit">무료로 등록하기 <span>→</span></button>
+          <div class="fineprint">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            수업 링크는 등록 후 WhatsApp으로 발송됩니다
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-c reveal-up"><div class="n" data-count="80" data-suffix="+">0</div><div class="l">PrepPals 학생 대부분이 달성하는 점수</div></div>
+      <div class="stat-c reveal-up"><div class="n" data-count="100" data-suffix="">0</div><div class="l">역대 최고 점수 — 만점 달성</div></div>
+      <div class="stat-c reveal-up"><div class="n" data-count="1" data-suffix="K+">0</div><div class="l">전 세계 커뮤니티 회원 수</div></div>
+      <div class="stat-c reveal-up"><div class="n" data-count="75" data-suffix="분">0</div><div class="l">체험 수업 시간 — 완전 무료</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 이런 걸 배웁니다 -->
+<section class="s">
+  <div class="container">
+    <div class="reveal-up">
+      <span class="eye">수업 내용</span>
+      <h2 class="s-title reveal">75분이 모든 것을 바꿉니다</h2>
+    </div>
+    <p class="s-sub reveal-up">막연한 개론 수업이 아닙니다.<br/>CSCA 수학 시험 전체 구조, 고빈출 유형, 검증된 풀이법을 단 한 번의 수업에서 모두 잡아드립니다.</p>
+
+    <div class="cards3">
+      <div class="card reveal-up">
+        <div class="num">01</div>
+        <div class="ic">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </div>
+        <h4>시험 전체 구조 분석</h4>
+        <p>CSCA 수학 시험의 모든 모듈, 배점 비중, 그리고 학생들이 점수를 잃는 구간을 정확히 짚어드립니다.</p>
+        <span class="tag">시험 청사진</span>
+      </div>
+      <div class="card reveal-up">
+        <div class="num">02</div>
+        <div class="ic">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </div>
+        <h4>고빈출 유형 리스트</h4>
+        <p>매번 반복 출제되는 유형만 골라서 공부하세요. 감이 아닌 데이터로 시험을 준비합니다.</p>
+        <span class="tag">핵심 출제 정보</span>
+      </div>
+      <div class="card reveal-up">
+        <div class="num">03</div>
+        <div class="ic">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 22 2 22 12 2"/></svg>
+        </div>
+        <h4>삼각함수 마스터 공식</h4>
+        <p>전체 배점의 25%를 차지하는 삼각함수를 위한 4단계 풀이법. 수업 당일 바로 적용할 수 있습니다.</p>
+        <span class="tag">배점의 25% 차지</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE / AFTER -->
+<section class="s">
+  <div class="container">
+    <div class="reveal-up">
+      <span class="eye">비교해 보세요</span>
+      <h2 class="s-title reveal">드래그해서 차이를 확인하세요</h2>
+    </div>
+    <p class="s-sub reveal-up">같은 시험, 같은 출발점. PrepPals의 차이는 확연히 다릅니다.</p>
+
+    <div class="ba-wrap reveal-up" id="ba">
+      <div class="ba-side ba-before">
+        <div class="ba-inner" style="max-width:50%">
+          <div class="ba-label">PrepPals 없이</div>
+          <ul class="ba-list">
+            <li><span class="ba-mark">✕</span>시험에 실제로 무엇이 나오는지 모름</li>
+            <li><span class="ba-mark">✕</span>잘못된 문제만 반복하며 시간 낭비</li>
+            <li><span class="ba-mark">✕</span>삼각함수 아예 포기</li>
+            <li><span class="ba-mark">✕</span>매 시험 시간 부족으로 패닉</li>
+            <li><span class="ba-mark">✕</span>CSCA를 너무 늦게 알게 됨</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ba-side ba-after" id="baAfter">
+        <div class="ba-inner">
+          <div class="ba-label">PrepPals와 함께</div>
+          <ul class="ba-list">
+            <li><span class="ba-mark">✓</span>모든 모듈의 정확한 배점 완벽 파악</li>
+            <li><span class="ba-mark">✓</span>체계적인 학습법 — 공부 시간 모두 효과적으로 활용</li>
+            <li><span class="ba-mark">✓</span>4단계 삼각함수 공식 — 배점의 25% 확보</li>
+            <li><span class="ba-mark">✓</span>모든 문제 자신 있게 풀어나가는 페이스 유지</li>
+            <li><span class="ba-mark">✓</span>요건을 일찍 파악해 지원 준비 완료</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ba-divider" id="baDivider"></div>
+      <div class="ba-handle" id="baHandle">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 3 12 9 6"/><polyline points="15 6 21 12 15 18"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 실제 결과 -->
+<section class="s">
+  <div class="container">
+    <div class="reveal-up">
+      <span class="eye">실제 결과</span>
+      <h2 class="s-title reveal">약속이 아닌 실제 점수입니다.</h2>
+    </div>
+
+    <div class="results-grid">
+      <div class="score-card reveal-up">
+        <div class="score-big">80<span style="font-size:.6em">+</span></div>
+        <div class="lbl">PrepPals 학생들의 평균 점수대</div>
+        <div class="score-divider"></div>
+        <div class="score-row"><span>학생 A</span><span class="v">97.5</span></div>
+        <div class="score-row"><span>학생 B</span><span class="v">92.5</span></div>
+        <div class="score-row"><span>학생 C</span><span class="v">92.5</span></div>
+        <div class="score-row"><span>학생 D</span><span class="v">87.5</span></div>
+        <div class="score-row hi"><span>학생 H</span><span class="v">100</span></div>
+        <div class="score-fine">실제 결과이며, 개인에 따라 다를 수 있습니다.</div>
+      </div>
+
+      <div class="testis">
+        <div class="testi reveal-up">
+          <div class="stars">★★★★★</div>
+          <p class="q">"선생님이 CSCA 수학 시험 전체 구조를 너무 명확하게 정리해 주셨어요. 그동안 제가 완전히 엉뚱한 걸 공부하고 있었다는 걸 알게 됐습니다."</p>
+          <div class="who">
+            <div class="av a1">J</div>
+            <div><b>Jason</b><br/><span>인도네시아 · 삼각함수</span></div>
+          </div>
+        </div>
+        <div class="testi reveal-up">
+          <div class="stars">★★★★★</div>
+          <p class="q">"배운 4단계 풀이법을 그날 바로 써봤는데, 풀이 속도가 진짜로 두 배가 됐어요."</p>
+          <div class="who">
+            <div class="av a3">C</div>
+            <div><b>Chloe</b><br/><span>말레이시아 · 함수 &amp; 방정식</span></div>
+          </div>
+        </div>
+        <div class="testi reveal-up">
+          <div class="stars">★★★★★</div>
+          <p class="q">"소규모 라이브 수업이라 집중이 정말 잘 됐어요. 혼자 녹화본 보면서 딴 생각하는 거랑은 차원이 다릅니다."</p>
+          <div class="who">
+            <div class="av a4">H</div>
+            <div><b>Helen</b><br/><span>파나마 · 해석 기하학</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 수업 상세 -->
+<section class="s">
+  <div class="container">
+    <div class="reveal-up">
+      <span class="eye">수업 안내</span>
+      <h2 class="s-title reveal">알아두셔야 할 모든 정보</h2>
+    </div>
+
+    <div class="course-grid">
+      <div class="course-row reveal-up">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+        <div><div class="lbl">날짜</div><div class="val">5월 31일 (일요일)</div></div>
+      </div>
+      <div class="course-row reveal-up">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><div class="lbl">시간</div><div class="val">오후 5시 (베이징 기준, GMT+8)</div></div>
+      </div>
+      <div class="course-row reveal-up">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><div class="lbl">플랫폼</div><div class="val">Zoom 라이브</div></div>
+      </div>
+      <div class="course-row reveal-up">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div><div class="lbl">수업 인원</div><div class="val">12~15명 (소규모 그룹)</div></div>
+      </div>
+      <div class="course-row hi reveal-up">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div><div class="lbl">체험 수업 비용</div><div class="val">완전 무료</div></div>
+      </div>
+      <div class="course-row reveal-up">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+        <div><div class="lbl">정규 과정</div><div class="val">$149 USD · 28시간 라이브 수업</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="s">
+  <div class="container">
+    <div class="reveal-up">
+      <span class="eye">자주 묻는 질문</span>
+      <h2 class="s-title reveal">궁금한 점이 있으신가요?</h2>
+    </div>
+
+    <div class="faqs">
+      <details class="faq reveal-up">
+        <summary>수학 기초가 없어도 괜찮을까요?<span class="plus">+</span></summary>
+        <div class="ans">네, 전혀 문제없습니다. 체험 수업은 처음 시작하는 학생들을 위해 설계되었습니다. 시험 구조 자체부터 시작하기 때문에 사전 지식이 필요 없습니다.</div>
+      </details>
+      <details class="faq reveal-up">
+        <summary>체험 수업 이후에 추가 비용이 발생하나요?<span class="plus">+</span></summary>
+        <div class="ans">아닙니다. 체험 수업은 완전 무료이며, 정규 과정 등록 여부는 전적으로 본인의 결정입니다. 어떠한 의무도 없습니다.</div>
+      </details>
+      <details class="faq reveal-up">
+        <summary>정규 과정 비용은 얼마인가요?<span class="plus">+</span></summary>
+        <div class="ans">정규 과정은 $149 USD입니다. CSCA 수학 전 과목을 28시간 동안 소규모로 진행하며, 완벽한 노트와 기출문제 세트가 모두 포함됩니다.</div>
+      </details>
+      <details class="faq reveal-up">
+        <summary>라이브 수업에 참석하지 못하면 어떻게 되나요?<span class="plus">+</span></summary>
+        <div class="ans">걱정하지 마세요. 등록 후 WhatsApp으로 연락을 드립니다. 라이브 참석이 어려운 경우 복습 영상 링크를 받으실 수 있습니다.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- 마지막 CTA -->
+<section class="final-cta">
+  <div class="container">
+    <h2 class="reveal-up">너무 늦게 알게 된 학생이 되지 마세요.</h2>
+    <p class="reveal-up">2027년 대학 입학 기준으로 CSCA 점수가 필요합니다.<br>6월, 12월 시험이 다가오고 있습니다 — 지금 시작하면 아직 늦지 않았습니다.</p>
+    <a href="#" class="final-btn reveal-up" onclick="openRegModal();return false;">무료로 등록하기 <span>→</span></a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-links">
+    <a href="https://www.instagram.com/csca_preppals?igsh=N3kzNmhnNml3Z21j&utm_source=qr" target="_blank" rel="noopener" class="footer-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+      @csca_preppals
+    </a>
+    <a href="https://wa.me/message/JVNWITHC6AG6I1" target="_blank" rel="noopener" class="footer-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+      WhatsApp
+    </a>
+    <a href="https://www.cscapreppals.com/" target="_blank" rel="noopener" class="footer-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      cscapreppals.com
+    </a>
+  </div>
+  <div>© 2026 CSCA PrepPals · Prepare with Pals, Power your Progress.</div>
+</footer>
+
+</main>
+
+<!-- 등록 모달 -->
+<div class="modal-backdrop" id="regModal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeRegModal()" aria-label="닫기">×</button>
+    <form class="reg" id="modalForm" name="trial-signup" method="POST" data-netlify="true">
+      <input type="hidden" name="form-name" value="trial-signup" />
+      <h3>무료 자리 지금 신청하기</h3>
+      <p class="sub">5월 31일 (일) 오후 5시 · 완전 무료 · Zoom 라이브</p>
+      <div class="field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <input type="text" name="name" placeholder="이름" required />
+      </div>
+      <div class="field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+        <input type="text" name="country" placeholder="국가 (예: South Korea)" required />
+      </div>
+      <div class="field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        <select name="exam_month" required>
+          <option value="">목표 시험 월</option>
+          <option>2026년 6월</option>
+          <option>2026년 12월</option>
+          <option>2027년</option>
+          <option>아직 미정</option>
+        </select>
+      </div>
+      <div class="field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <select name="language" required>
+          <option value="">수업 언어 선택</option>
+          <option value="english">영어 수업</option>
+          <option value="chinese">중국어 수업 (中文)</option>
+        </select>
+      </div>
+      <div class="field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <input type="tel" name="whatsapp" placeholder="WhatsApp 번호 (예: +82-10-1234-5678)" required />
+      </div>
+      <div class="field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+        <input type="email" name="email" placeholder="이메일 주소" required />
+      </div>
+      <button class="cta" type="submit">무료로 등록하기 <span>→</span></button>
+      <div class="fineprint">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        수업 링크는 등록 후 WhatsApp으로 발송됩니다
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 소셜 프루프 토스트 -->
+<div class="sp-toast" id="spToast">
+  <span class="sp-live-dot"></span>
+  <span class="sp-toast-text" id="spToastText"></span>
+</div>
+
+<a class="wa-btn" href="https://wa.me/8618813052817?text=Hi%21%20I%27m%20interested%20in%20PrepPals%27%20free%20CSCA%20Math%20trial%20class%20on%20May%2031.%20How%20can%20I%20sign%20up%3F" target="_blank" rel="noopener">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+  WhatsApp 문의
+</a>
+
+<div class="mobile-bar">
+  <a href="#" onclick="openRegModal();return false;">무료 등록하기 <span>→</span></a>
+</div>
+
+<script>
+/* Canvas */
+(function(){
+  const cvs = document.getElementById("mathCanvas");
+  const ctx = cvs.getContext("2d");
+  let W, H, dpr;
+  const glyphs = ["π","∑","∫","√","∞","θ","Δ","λ","f(x)","x²","sinθ","cosθ","∂","≈","≠","α","β","γ"];
+  const items = [];
+  const N = 18;
+  function resize(){ dpr = Math.min(window.devicePixelRatio||1,2); W = cvs.clientWidth = window.innerWidth; H = cvs.clientHeight = window.innerHeight; cvs.width = W*dpr; cvs.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+  function rand(a,b){return a+Math.random()*(b-a)}
+  function init(){ items.length=0; for(let i=0;i<N;i++){items.push({x:rand(0,W),y:rand(0,H),vx:rand(-0.15,0.15),vy:rand(-0.1,0.1),size:rand(14,52),op:rand(0.05,0.22),glyph:glyphs[Math.floor(Math.random()*glyphs.length)],rot:rand(-0.2,0.2),vr:rand(-0.0008,0.0008),hue:Math.random()<0.18?"coral":"white"});} }
+  function draw(){ ctx.clearRect(0,0,W,H); for(const it of items){ it.x+=it.vx; it.y+=it.vy; it.rot+=it.vr; if(it.x<-60)it.x=W+60; if(it.x>W+60)it.x=-60; if(it.y<-60)it.y=H+60; if(it.y>H+60)it.y=-60; ctx.save(); ctx.translate(it.x,it.y); ctx.rotate(it.rot); ctx.font=`italic 500 ${it.size}px Playfair Display, serif`; ctx.fillStyle=it.hue==="coral"?`rgba(255,101,52,${it.op*1.4})`:`rgba(255,255,255,${it.op})`; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(it.glyph,0,0); ctx.restore(); } requestAnimationFrame(draw); }
+  window.addEventListener("resize",()=>{resize();init()});
+  resize(); init(); requestAnimationFrame(draw);
+})();
+
+/* Nav */
+(function(){ const nav=document.getElementById("nav"); const s=()=>nav.classList.toggle("scrolled",window.scrollY>24); window.addEventListener("scroll",s,{passive:true}); s(); })();
+
+/* Reveal */
+(function(){
+  const io=new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting){const peers=e.target.parentElement?.querySelectorAll(".reveal-up:not(.in)")||[];const idx=[...peers].indexOf(e.target);e.target.style.transitionDelay=(idx>=0?idx*100:0)+"ms";e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:0.12});
+  document.querySelectorAll(".reveal-up").forEach(el=>io.observe(el));
+  const ioT=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");ioT.unobserve(e.target);}});},{threshold:0.4});
+  document.querySelectorAll(".s-title.reveal").forEach(el=>ioT.observe(el));
+})();
+
+/* Count-up */
+(function(){
+  const els=document.querySelectorAll("[data-count]");
+  const animate=(el)=>{ const target=parseFloat(el.dataset.count); const suffix=el.dataset.suffix||""; const dur=1400; const start=performance.now(); function step(t){ const p=Math.min(1,(t-start)/dur); const eased=1-Math.pow(1-p,3); el.textContent=Math.round(target*eased)+suffix; if(p<1)requestAnimationFrame(step); else el.textContent=target+suffix; } requestAnimationFrame(step); };
+  const io=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){animate(e.target);io.unobserve(e.target);}});},{threshold:0.5});
+  els.forEach(el=>io.observe(el));
+})();
+
+/* Before/After */
+(function(){
+  const wrap=document.getElementById("ba"); if(!wrap)return;
+  const after=document.getElementById("baAfter"); const divider=document.getElementById("baDivider"); const handle=document.getElementById("baHandle");
+  let dragging=false;
+  function setPos(pct){ pct=Math.max(6,Math.min(94,pct)); after.style.clipPath=`inset(0 0 0 ${pct}%)`; divider.style.left=pct+"%"; handle.style.left=pct+"%"; }
+  function pctFromEvent(e){ const rect=wrap.getBoundingClientRect(); const x=(e.touches?e.touches[0].clientX:e.clientX)-rect.left; return(x/rect.width)*100; }
+  handle.addEventListener("mousedown",e=>{dragging=true;e.preventDefault()});
+  handle.addEventListener("touchstart",e=>{dragging=true;e.preventDefault()},{passive:false});
+  wrap.addEventListener("click",(e)=>{if(e.target!==handle)setPos(pctFromEvent(e))});
+  window.addEventListener("mousemove",(e)=>{if(!dragging)return;setPos(pctFromEvent(e))});
+  window.addEventListener("touchmove",(e)=>{if(!dragging)return;setPos(pctFromEvent(e))},{passive:true});
+  window.addEventListener("mouseup",()=>{dragging=false});
+  window.addEventListener("touchend",()=>{dragging=false});
+  setPos(50);
+})();
+
+/* Modal */
+function openRegModal(){ const m=document.getElementById('regModal'); m.classList.add('open'); document.body.style.overflow='hidden'; setTimeout(()=>{m.querySelector('input,select')?.focus();},340); }
+function closeRegModal(){ const m=document.getElementById('regModal'); m.classList.remove('open'); document.body.style.overflow=''; }
+document.getElementById('regModal').addEventListener('click',function(e){if(e.target===this)closeRegModal();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeRegModal();});
+(function(){
+  const form=document.getElementById('modalForm');
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    const btn=form.querySelector('button[type="submit"]');
+    btn.disabled=true; btn.textContent='제출 중…';
+    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(form)).toString()})
+    .then(()=>{ form.innerHTML=`<div class="success"><div class="em">🎉</div><h4>등록이 완료되었습니다!</h4><p>수업 링크는 수업 24시간 전<br/>WhatsApp으로 발송됩니다.</p></div>`; })
+    .catch(()=>{ btn.disabled=false; btn.textContent='무료로 등록하기 →'; alert('제출에 실패했습니다. 다시 시도해 주세요.'); });
+  });
+})();
+(function(){
+  const form=document.getElementById('regForm');
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    const btn=form.querySelector('button[type="submit"]');
+    btn.disabled=true; btn.textContent='제출 중…';
+    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(form)).toString()})
+    .then(()=>{ form.innerHTML=`<div class="success"><div class="em">🎉</div><h4>등록이 완료되었습니다!</h4><p>수업 링크는 수업 24시간 전<br/>WhatsApp으로 발송됩니다.</p></div>`; })
+    .catch(()=>{ btn.disabled=false; btn.textContent='무료로 등록하기 →'; alert('제출에 실패했습니다. 다시 시도해 주세요.'); });
+  });
+})();
+
+/* Social proof */
+(function(){
+  const countWrap=document.getElementById('spRealCount');
+  const countEl=document.getElementById('spCount');
+  let signups=[],idx=0,ticker=null;
+
+  function relativeTime(iso){
+    const d=Math.floor((Date.now()-new Date(iso))/1000);
+    if(d<60)return '방금 전';
+    if(d<3600)return Math.floor(d/60)+'분 전';
+    if(d<86400)return Math.floor(d/3600)+'시간 전';
+    return Math.floor(d/86400)+'일 전';
+  }
+  function countUp(el,target){ const dur=1200,t0=performance.now(),from=parseInt(el.textContent)||0; (function step(t){ const p=Math.min(1,(t-t0)/dur); el.textContent=Math.round(from+(target-from)*(1-Math.pow(1-p,3))); if(p<1)requestAnimationFrame(step); else el.textContent=target; })(t0); }
+  function showToast(entry){
+    const toastText=document.getElementById('spToastText');
+    if(!toastText)return;
+    toastText.className='sp-toast-text out';
+    setTimeout(()=>{ toastText.textContent=`${entry.name} · ${entry.country} · ${relativeTime(entry.time)} 체험 수업 신청`; toastText.className='sp-toast-text in'; requestAnimationFrame(()=>requestAnimationFrame(()=>{toastText.className='sp-toast-text show';})); },280);
+  }
+  function startTicker(){
+    const toast=document.getElementById('spToast');
+    if(ticker)clearInterval(ticker);
+    if(toast)toast.classList.add('visible');
+    showToast(signups[idx%signups.length]);
+    ticker=setInterval(()=>{idx=(idx+1)%signups.length;showToast(signups[idx]);},4000);
+  }
+  async function fetchData(){
+    try{
+      const res=await fetch('/.netlify/functions/get-signups');
+      if(!res.ok)throw new Error();
+      const data=await res.json();
+      if(!data.total||!data.signups?.length)return;
+      signups=data.signups;
+      countUp(countEl,data.total);
+      if(!ticker)startTicker();
+    }catch(e){}
+  }
+  fetchData();
+})();
+</script>
+</body>
+</html>

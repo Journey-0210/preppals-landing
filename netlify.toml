@@ -2,6 +2,31 @@
   publish = "."
 
 [[redirects]]
+  from = "/ko"
+  to = "/PrepPals Landing KR.html"
+  status = 200
+
+[[redirects]]
+  from = "/ko-trial"
+  to = "/PrepPals Landing KR-B.html"
+  status = 200
+
+[[redirects]]
+  from = "/trial"
+  to = "/PrepPals Landing B.html"
+  status = 200
+
+[[redirects]]
+  from = "/en-trial"
+  to = "/PrepPals Landing EN-B.html"
+  status = 200
+
+[[redirects]]
+  from = "/id"
+  to = "/PrepPals Landing ID.html"
+  status = 200
+
+[[redirects]]
   from = "/en"
   to = "/PrepPals Landing EN.html"
   status = 200

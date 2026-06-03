@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
 <title>CSCA PrepPals · Free Trial Math Class</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -118,16 +119,16 @@ main{position:relative;z-index:2}
 .spots-l b{color:var(--coral);font-weight:700}
 
 /* ── Element A: Bottom-left floating Toast ── */
-.sp-toast{position:fixed;bottom:28px;left:28px;z-index:250;display:none;align-items:center;gap:10px;padding:12px 18px;border-radius:14px;background:rgba(8,14,32,.96);border:1px solid rgba(255,255,255,.13);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 10px 48px rgba(0,0,0,.55);font-family:var(--sans);font-size:13px;color:rgba(255,255,255,.88);max-width:310px;line-height:1.4}
+.sp-toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:250;display:none;align-items:center;gap:10px;padding:12px 20px;border-radius:14px;background:rgba(8,14,32,.96);border:1px solid rgba(255,255,255,.13);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 10px 48px rgba(0,0,0,.55);font-family:var(--sans);font-size:13px;color:rgba(255,255,255,.88);white-space:nowrap;line-height:1.4}
 .sp-toast.visible{display:flex;animation:toastIn 380ms cubic-bezier(.34,1.4,.64,1) both}
-@keyframes toastIn{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes toastIn{from{transform:translateX(-50%) translateY(18px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
 .sp-live-dot{width:8px;height:8px;border-radius:50%;background:#22c993;flex-shrink:0;box-shadow:0 0 8px rgba(34,201,147,.8);animation:livePulse 2s ease-in-out infinite}
 @keyframes livePulse{0%,100%{opacity:1;box-shadow:0 0 8px rgba(34,201,147,.7)}50%{opacity:.45;box-shadow:0 0 3px rgba(34,201,147,.3)}}
 .sp-toast-text{transition:transform 280ms ease,opacity 280ms ease}
 .sp-toast-text.out{transform:translateY(-7px);opacity:0}
 .sp-toast-text.in{transform:translateY(7px);opacity:0}
 .sp-toast-text.show{transform:translateY(0);opacity:1}
-@media(max-width:560px){.sp-toast{bottom:76px;left:12px;right:12px;max-width:none;font-size:12px;padding:10px 14px}}
+@media(max-width:767px){.sp-toast{display:none!important}}
 /* ── Element B: Real total count ── */
 .sp-real-count{display:none;align-items:center;gap:7px;margin-top:10px;font-family:var(--sans);font-size:13px;color:var(--fg-2)}
 .sp-real-count.visible{display:flex}
@@ -154,9 +155,15 @@ main{position:relative;z-index:2}
 .cta:hover{background:var(--coral-2);transform:translateY(-2px) scale(1.01);box-shadow:0 18px 36px -8px rgba(255,101,52,.7), 0 0 0 6px rgba(255,101,52,.12)}
 .cta:active{transform:translateY(0) scale(.99)}
 .fineprint{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;font-family:var(--sans);font-size:11.5px;color:var(--fg-4)}
-.hero-btn{display:inline-flex;align-items:center;gap:9px;height:52px;padding:0 28px;border-radius:999px;background:var(--coral);color:#fff;font-family:var(--sans);font-weight:700;font-size:15px;margin-bottom:28px;transition:all 220ms;box-shadow:0 12px 28px -8px rgba(255,101,52,.55);cursor:pointer}
+.hero-btn{display:inline-flex;align-items:center;gap:9px;height:52px;padding:0 28px;border-radius:999px;background:var(--coral);color:#fff;font-family:var(--sans);font-weight:700;font-size:15px;transition:all 220ms;box-shadow:0 12px 28px -8px rgba(255,101,52,.55);cursor:pointer}
 .hero-btn:hover{background:var(--coral-2);transform:translateY(-2px);box-shadow:0 18px 36px -8px rgba(255,101,52,.7),0 0 0 6px rgba(255,101,52,.12)}
 .hero-btn:active{transform:translateY(0)}
+.hero-btns{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.hero-trust{display:flex;align-items:center;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+.hero-trust span{display:flex;align-items:center;gap:5px;font-family:var(--sans);font-size:13px;color:var(--fg-3);font-weight:500}
+.hero-trust span::before{content:"✓";color:#25D366;font-weight:800;font-size:14px}
+.wa-hero-btn{display:inline-flex;align-items:center;gap:9px;height:52px;padding:0 24px;border-radius:999px;background:#25D366;color:#fff;font-family:var(--sans);font-weight:700;font-size:15px;text-decoration:none;transition:all 220ms;box-shadow:0 12px 28px -8px rgba(37,211,102,.5)}
+.wa-hero-btn:hover{background:#1ebe5d;transform:translateY(-2px);box-shadow:0 18px 36px -8px rgba(37,211,102,.65)}
 
 /* Stats strip */
 .stats{margin:60px 0;padding:36px 0;background:rgba(8,12,28,.6);border-top:1px solid var(--stroke-1);border-bottom:1px solid var(--stroke-1);backdrop-filter:blur(8px)}
@@ -285,7 +292,10 @@ section.s{padding:100px 0;position:relative}
 .modal-close:hover{background:rgba(255,255,255,.22)}
 
 /* Footer */
-footer{padding:36px 0;border-top:1px solid var(--stroke-1);text-align:center;font-family:var(--sans);font-size:12px;color:var(--fg-4)}
+footer{padding:52px 0 36px;border-top:1px solid var(--stroke-1);text-align:center;font-family:var(--sans);font-size:12px;color:var(--fg-4)}
+.footer-links{display:flex;align-items:center;justify-content:center;gap:28px;margin-bottom:20px;flex-wrap:wrap}
+.footer-link{display:inline-flex;align-items:center;gap:7px;color:var(--fg-3);font-size:13px;text-decoration:none;transition:color 200ms;font-family:var(--sans)}
+.footer-link:hover{color:#fff}
 
 /* Success state */
 .success{padding:36px 16px;text-align:center}
@@ -401,15 +411,21 @@ footer{padding:36px 0;border-top:1px solid var(--stroke-1);text-align:center;fon
   <div class="container">
     <div class="hero-grid">
       <div>
-        <div class="badge"><span class="pulse"></span> CSCA Math · May 17 (Sun) Free Trial Class</div>
+        <div class="badge"><span class="pulse"></span> CSCA Math · May 31 (Sun) Free Trial Class</div>
         <h1 class="h1">
           Preparing for CSCA Math?<br/>
           You might be studying<br/>
           <span class="accent">the wrong way.</span>
         </h1>
         <p class="body-lg" style="font-size:16px;color:var(--fg-3);margin-bottom:14px;">CSCA Math follows the Chinese curriculum —<br/>most students don't realize this.</p>
-        <p class="hero-detail" style="font-size:15px;opacity:1;margin-bottom:26px;">Join a free 75-min class to know what to study and how.</p>
-        <a href="#" class="hero-btn" onclick="openRegModal();return false;">Book Free Trial <span>→</span></a>
+        <p class="hero-detail" style="font-size:16px;opacity:1;font-weight:500;margin-bottom:22px;"><span style="color:var(--coral);font-weight:800;font-size:26px;letter-spacing:.01em;">FREE 75-min class</span> — learn what to study and how.</p>
+        <div class="hero-btns">
+          <a href="#" class="hero-btn" onclick="openRegModal();return false;">Book Free Trial <span>→</span></a>
+          <a class="wa-hero-btn" href="https://wa.me/8618813052817?text=Hi!%20I%27m%20interested%20in%20the%20PrepPals%20free%20CSCA%20Math%20trial%20class%20on%20May%2031.%20How%20can%20I%20sign%20up%3F" target="_blank" rel="noopener">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            WhatsApp Us
+          </a>
+        </div>
         <div class="proof">
           <div class="avatars">
             <div class="av a1">A</div>
@@ -429,7 +445,7 @@ footer{padding:36px 0;border-top:1px solid var(--stroke-1);text-align:center;fon
         <form class="reg" id="regForm" name="trial-signup" method="POST" data-netlify="true">
           <input type="hidden" name="form-name" value="trial-signup" />
           <h3>Claim Your Free Spot</h3>
-          <p class="sub">May 17 (Sun) 20:00 · 100% Free · Live on Zoom</p>
+          <p class="sub">May 31 (Sun) 17:00 · 100% Free · Live on Zoom</p>
 
           <div class="field">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -447,6 +463,14 @@ footer{padding:36px 0;border-top:1px solid var(--stroke-1);text-align:center;fon
               <option>December 2026</option>
               <option>2027</option>
               <option>Not sure yet</option>
+            </select>
+          </div>
+          <div class="field">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <select name="language" required>
+              <option value="">Preferred Teaching Language</option>
+              <option value="english">English</option>
+              <option value="chinese">Chinese (中文)</option>
             </select>
           </div>
           <div class="field">
@@ -626,11 +650,11 @@ footer{padding:36px 0;border-top:1px solid var(--stroke-1);text-align:center;fon
     <div class="course-grid">
       <div class="course-row reveal-up">
         <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
-        <div><div class="lbl">Date</div><div class="val">May 17 (Sunday)</div></div>
+        <div><div class="lbl">Date</div><div class="val">May 31 (Sunday)</div></div>
       </div>
       <div class="course-row reveal-up">
         <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div><div class="lbl">Time</div><div class="val">20:00 Beijing Time (GMT+8)</div></div>
+        <div><div class="lbl">Time</div><div class="val">17:00 Beijing Time (GMT+8)</div></div>
       </div>
       <div class="course-row reveal-up">
         <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
@@ -690,7 +714,23 @@ footer{padding:36px 0;border-top:1px solid var(--stroke-1);text-align:center;fon
   </div>
 </section>
 
-<footer>© 2026 CSCA PrepPals · Prepare with Pals, Power your Progress.</footer>
+<footer>
+  <div class="footer-links">
+    <a href="https://www.instagram.com/csca_preppals?igsh=N3kzNmhnNml3Z21j&utm_source=qr" target="_blank" rel="noopener" class="footer-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+      @csca_preppals
+    </a>
+    <a href="https://wa.me/message/JVNWITHC6AG6I1" target="_blank" rel="noopener" class="footer-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+      WhatsApp
+    </a>
+    <a href="https://www.cscapreppals.com/" target="_blank" rel="noopener" class="footer-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      cscapreppals.com
+    </a>
+  </div>
+  <div>© 2026 CSCA PrepPals · Prepare with Pals, Power your Progress.</div>
+</footer>
 
 </main>
 
@@ -701,7 +741,7 @@ footer{padding:36px 0;border-top:1px solid var(--stroke-1);text-align:center;fon
     <form class="reg" id="modalForm" name="trial-signup" method="POST" data-netlify="true">
       <input type="hidden" name="form-name" value="trial-signup" />
       <h3>Claim Your Free Spot</h3>
-      <p class="sub">May 17 (Sun) 20:00 · 100% Free · Live on Zoom</p>
+      <p class="sub">May 31 (Sun) 17:00 · 100% Free · Live on Zoom</p>
       <div class="field">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <input type="text" name="name" placeholder="Full Name" required />
@@ -718,6 +758,14 @@ footer{padding:36px 0;border-top:1px solid var(--stroke-1);text-align:center;fon
           <option>December 2026</option>
           <option>2027</option>
           <option>Not sure yet</option>
+        </select>
+      </div>
+      <div class="field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <select name="language" required>
+          <option value="">Preferred Teaching Language</option>
+          <option value="english">English</option>
+          <option value="chinese">Chinese (中文)</option>
         </select>
       </div>
       <div class="field">
@@ -740,11 +788,6 @@ footer{padding:36px 0;border-top:1px solid var(--stroke-1);text-align:center;fon
 <div class="mobile-bar">
   <a href="#" onclick="openRegModal();return false;">Register Free <span>→</span></a>
 </div>
-
-<a class="wa-btn" href="https://wa.me/8618813052817?text=Hi!%20I%27m%20interested%20in%20the%20PrepPals%20free%20CSCA%20Math%20trial%20class%20on%20May%2017.%20How%20can%20I%20sign%20up%3F" target="_blank" rel="noopener">
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-  WhatsApp Us
-</a>
 
 <script>
 /* ====================== Floating math universe (canvas) ====================== */
@@ -930,8 +973,6 @@ document.addEventListener('keydown', function(e){
 
 /* ====================== Social proof – Element A & B ====================== */
 (function(){
-  const toast     = document.getElementById('spToast');
-  const toastText = document.getElementById('spToastText');
   const countWrap = document.getElementById('spRealCount');
   const countEl   = document.getElementById('spCount');
   let signups = [], idx = 0, ticker = null;
@@ -954,6 +995,8 @@ document.addEventListener('keydown', function(e){
   }
 
   function showToast(entry){
+    const toastText = document.getElementById('spToastText');
+    if(!toastText) return;
     toastText.className = 'sp-toast-text out';
     setTimeout(()=>{
       toastText.textContent = `${entry.name} · ${entry.country} · ${relativeTime(entry.time)} registered for the trial`;
@@ -963,8 +1006,9 @@ document.addEventListener('keydown', function(e){
   }
 
   function startTicker(){
+    const toast = document.getElementById('spToast');
     if(ticker) clearInterval(ticker);
-    toast.classList.add('visible');
+    if(toast) toast.classList.add('visible');
     showToast(signups[idx % signups.length]);
     ticker = setInterval(()=>{
       idx = (idx+1) % signups.length;

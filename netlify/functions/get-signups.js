@@ -7,16 +7,24 @@ exports.handler = async () => {
   }
 
   try {
-    const res = await fetch(
-      `https://api.netlify.com/api/v1/forms/${formId}/submissions?per_page=50`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    // Fetch all pages to get accurate total count
+    let allSubmissions = [];
+    let page = 1;
+    const perPage = 100;
 
-    if (!res.ok) throw new Error(`Netlify API ${res.status}`);
+    while (true) {
+      const res = await fetch(
+        `https://api.netlify.com/api/v1/forms/${formId}/submissions?per_page=${perPage}&page=${page}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (!res.ok) throw new Error(`Netlify API ${res.status}`);
+      const batch = await res.json();
+      allSubmissions = allSubmissions.concat(batch);
+      if (batch.length < perPage) break; // last page
+      page++;
+    }
 
-    const submissions = await res.json();
-
-    const signups = submissions.map(s => {
+    const signups = allSubmissions.map(s => {
       const fullName = (s.data?.name || s.data?.姓名 || '').trim();
       const firstName = fullName.charAt(0) || '?';
       const country = s.data?.country || s.data?.['国家 / 地区'] || '';
@@ -26,7 +34,7 @@ exports.handler = async () => {
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
-      body: JSON.stringify({ signups, total: submissions.length }),
+      body: JSON.stringify({ signups, total: allSubmissions.length }),
     };
   } catch (err) {
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
